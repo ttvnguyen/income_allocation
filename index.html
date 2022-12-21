@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="./styles.css">
+    <title>Income Allocation - Tax Year 2022</title>
+</head>
+<body>
+    <nav class="navbar">
+        <div class="container">
+            <ul class="nav">
+                <h1>Income Allocation - Tax Year 2022</h1>
+                <li>
+                    <a href="#">about</a>
+                  </li>
+                  <li>
+                    <a href="#">how to use</a>
+                  </li>
+                  
+            </ul>
+        </div>
+    </nav>
+    <section class="user_info">
+        <div class="container">
+            <div class="primary">
+                <p>Primary taxpayer</p>
+                <input type="text" id="primary_name" placeholder="">
+                <p>Lived in</p>
+                <select id="states" name="states">
+                    <option value="ct_state">Connecticut</option>
+                    <option value="nj_state">New Jersey</option>
+                    <option value="ny_state">New York</option>
+                    <option value="ma_state">Massachusetts</option>
+                </select>
+                <p>worked in</p>
+                <select id="states" name="states">
+                    <option value="ct_state">Connecticut</option>
+                    <option value="nj_state">New Jersey</option>
+                    <option value="ny_state">New York</option>
+                    <option value="ma_state">Massachusetts</option>
+                </select>
+            </div>
+            <div class="secondary">
+                <p>Secondary taxpayer</p>
+                <input type="text" id="secondary_name" placeholder="">
+                <p>Lived in</p><select id="states" name="states">
+                    <option value="ct_state">Connecticut</option>
+                    <option value="nj_state">New Jersey</option>
+                    <option value="ny_state">New York</option>
+                    <option value="ma_state">Massachusetts</option>
+                </select>
+                <p>worked in</p><select id="states" name="states">
+                    <option value="ct_state">Connecticut</option>
+                    <option value="nj_state">New Jersey</option>
+                    <option value="ny_state">New York</option>
+                    <option value="ma_state">Massachusetts</option>
+                </select>
+            </div>
+            <div>
+                <p>Moved to:</p>
+                <select id="states" name="states">
+                    <option value="ct_state">Connecticut</option>
+                    <option value="nj_state">New Jersey</option>
+                    <option value="ny_state">New York</option>
+                    <option value="ma_state">Massachusetts</option>
+                </select>
+                <p>When:
+                    <input type="text" id="when"></p>
+            </div>
+        </div>
+    </section>
+    <section class="user_income">
+        <div class="container">
+            <table class="row">
+                <tr class="column">
+                    <th></th>
+                
+                    <th></th>
+                
+                    <th colspan="2">NY</th>
+                
+                    <th colspan="2">CT</th>
+                </tr>
+                <tr class="column">
+                    <th>tax form</th>
+                
+                    <th>Amount</th>
+                
+                    <th>NY Resident</th>
+                
+                    <th>NY non-res</th>
+                
+                    <th>CT Res</th>
+                
+                    <th>CT Non-res</th>
+                </tr>
+            </table>
+            <br>
+            <button>New</button>
+        </div>
+    </section>
+</body>
+<script src="./app.js"></script>
+</html>

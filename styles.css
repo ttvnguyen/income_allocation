@@ -1,0 +1,88 @@
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+    
+body {
+    font-family: 'Poppins', sans-serif;
+    font-size: 16px;
+    line-height: 1.5;
+    color: #333;
+    background: whitesmoke;
+    padding: 10px;
+}
+ul {
+    list-style-type: none;
+   }
+    
+   .container {
+    max-width: 1000px;
+    margin: 0 auto;
+    padding: 0 30px;
+    border: 2px solid grey;
+    border-radius: 5px;
+   }
+    
+   .navbar {
+    background: gainsboro;
+    color: #fff;
+    height: 60px;
+   }
+   .navbar a {
+    color: #fff;
+    text-decoration: none;
+    font-size: 18px;
+    font-weight: bold;
+   }
+    
+   .navbar a:hover {
+    color: lightblue;
+   }
+    
+   .navbar .container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    height: 100%;
+   }
+    
+   .navbar ul {
+    display: flex;
+   }
+    
+   .navbar ul li {
+     margin-left: 100px;
+   }
+   .user_info .container {
+    display: flex;
+    /* flex-wrap: wrap; */
+    flex-direction: column;
+    justify-content: space-between;
+   }
+
+   .user_info .container .primary {
+    display: flex;
+    flex-direction: row;
+   }
+   .user_info .container .secondary {
+    display: flex;
+    flex-direction: row;
+   }
+
+   .user_income .container .states{
+    display: flex;
+    flex-direction: row;
+    justify-content:space-around;
+
+   }
+   
+   table, th, td {
+    border:1px solid black;
+  }
+
+   table {
+    width: 100%;
+  }
+  
+  
