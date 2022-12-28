@@ -84,4 +84,9 @@ ul {
     width: 100%;
   }
   
-  
+  button i {
+    font-size: 1rem;
+    padding: 5px;
+    color: black;
+    width: 30px;
+}
