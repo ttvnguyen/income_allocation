@@ -12,7 +12,7 @@
     <nav class="navbar">
         <div class="container">
             <ul class="nav">
-                <h1>Income Allocation - Tax Year 2022</h1>
+                <h3>Income Allocation Worksheet - Tax Year 2022</h3>
                 <li>
                     <a href="#">about</a>
                   </li>
@@ -25,17 +25,17 @@
     <section class="user_info">
         <div class="container">
             <div class="primary">
-                <label>Primary taxpayer</label>
-                <input type="text" id="primary_name" placeholder="">
-                <label>Lived in</label>
-                <select id="states" name="states">
+                <label><strong>P</strong>rimary taxpayer &nbsp&nbsp&nbsp&nbsp </label>
+                <input type="text" id="primary_name" placeholder="Taxpayer Name">
+                <label>&nbspLived in </label>
+                <select id="pr_stateLive" name="states">
                     <option value="CT">Connecticut</option>
                     <option value="NJ">New Jersey</option>
                     <option value="NY">New York</option>
                     <option value="MA">Massachusetts</option>
                 </select>
-                <label>worked in</label>
-                <select id="states" name="states">
+                <label>&nbspWorked in</label>
+                <select id="pr_stateWork" name="states">
                     <option value="CT">Connecticut</option>
                     <option value="NJ">New Jersey</option>
                     <option value="NY">New York</option>
@@ -43,15 +43,15 @@
                 </select>
             </div>
             <div class="secondary">
-                <label>Secondary taxpayer</label>
-                <input type="text" id="secondary_name" placeholder="">
-                <label>Lived in</label><select id="states" name="states">
+                <label><strong>S</strong>econdary taxpayer</label>
+                <input type="text" id="secondary_name" placeholder="Taxpayer Name">
+                <label>&nbspLived in</label><select id="sec_stateLive" name="states">
                     <option value="CT">Connecticut</option>
                     <option value="NJ">New Jersey</option>
                     <option value="NY">New York</option>
                     <option value="MA">Massachusetts</option>
                 </select>
-                <label>worked in</label><select id="states" name="states">
+                <label>&nbspWorked in</label><select id="sec_stateWork" name="states">
                     <option value="CT">Connecticut</option>
                     <option value="NJ">New Jersey</option>
                     <option value="NY">New York</option>
@@ -60,7 +60,7 @@
             </div>
             <div class="states">
                 <label>Moved to:</label>
-                <select id="states" name="states">
+                <select id="state_move" name="states">
                     <option value="CT">Connecticut</option>
                     <option value="NJ">New Jersey</option>
                     <option value="NY">New York</option>
@@ -72,7 +72,7 @@
             <button id="submit_user_info" onclick="setUserInfo()">Submit</button>
         </div>
     </section>
-    <section>
+    <section class="section_user_income">
         <div class="container">
             <table class="user_income">
                 <tr class="column">
