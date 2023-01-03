@@ -28,10 +28,10 @@
                 <label><strong>P</strong>rimary taxpayer &nbsp&nbsp&nbsp&nbsp </label>
                 <input type="text" id="primary_name" placeholder="Taxpayer Name">
                 <label>&nbspLived in </label>
-                <select id="pr_stateLive" name="states">
+                <select id="pr_stateFrom" name="states" onclick="setSecondaryStateFrom()">
                     <option value="CT">Connecticut</option>
                     <option value="NJ">New Jersey</option>
-                    <option value="NY">New York</option>
+                    <option value="NY" selected>New York</option>
                     <option value="MA">Massachusetts</option>
                 </select>
                 <label>&nbspWorked in</label>
@@ -45,10 +45,10 @@
             <div class="secondary">
                 <label><strong>S</strong>econdary taxpayer</label>
                 <input type="text" id="secondary_name" placeholder="Taxpayer Name">
-                <label>&nbspLived in</label><select id="sec_stateLive" name="states">
+                <label>&nbspLived in</label><select id="sec_stateFrom" name="states" disabled>
                     <option value="CT">Connecticut</option>
                     <option value="NJ">New Jersey</option>
-                    <option value="NY">New York</option>
+                    <option value="NY" selected>New York</option>
                     <option value="MA">Massachusetts</option>
                 </select>
                 <label>&nbspWorked in</label><select id="sec_stateWork" name="states">
@@ -97,12 +97,47 @@
                     <th>Resident</th>
                     <th>Non-Res</th>
                 </tr>
+                <tr class="column">
+                    <th>TOTAL</th>
+                    <th></th>
+                    <th id="amt_stateFrom_asRes">$</th>
+                    <th id="amt_stateFrom_asNonRes">$</th>
+                    <th id="amt_stateTo_asRes">$</th>
+                    <th id="amt_stateTo_asNonRes">$</th>
+                </tr>
             </table>
             <br>
             <button id="add_option" onclick="createIncomeList()">Add New Income Source</button>
             <button id="deleteBtn">
                 <i class="fa-solid fa-trash-alt" id="delete"></i>
             </button>
+            <button id="calculate">Calculate</button>
+        </div>
+    </section>
+    <section class="state_credit">
+        <div class="container">
+            <table>
+                <tr class="column">
+                    <th id="state_from" colspan="3">NY</th>
+                    <th id="state_to" colspan="3">CT</th>
+                </tr>
+                <tr>
+                    <th></th>
+                    <th></th>
+                    <th></th>
+                    <th></th>
+                    <th></th>
+                    <th></th>
+                </tr>
+                <tr>
+                    <th></th>
+                    <th></th>
+                    <th></th>
+                    <th></th>
+                    <th></th>
+                    <th></th>
+                </tr>
+            </table>
         </div>
     </section>
 </body>

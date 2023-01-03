@@ -21,13 +21,44 @@ const ct_data = {"data":[{"zip":"06001","country":"US","state":"CT","state_rate"
 
 // console.log(ct_data)
 
-class W2 {
-    constructor (amount){
-        this.amount = amount
-
+class UserInfo {
+    constructor(name, stateFrom, stateWork, stateTo){
+        this.name = name
+        this.stateFrom = stateFrom
+        this.stateWork = stateWork
     }
+}
+
+class W2 extends UserInfo{
+    constructor (name, stateFrom, stateWork, stateTo, amount, months){
+        super(name, stateFrom, stateWork, stateTo)
+        this.amount = amount
+        this.months = months
+        console.log(`W2 class amount ${amount}`)
+    }
+    
+
     display(){
-        console.log (`In w2`)
+        console.log (`In w2 Lived: ${this.stateFrom} Worked ${this.stateWork}`)
+        let parAmount = this.amount - parseInt(this.amount/12*this.months)
+        if (this.stateFrom == this.stateWork){
+            document.querySelector(`#amount1${numOfForms}`).textContent = parAmount
+            //Add 
+            amtStateFromAsNonRes += parAmount
+            console.log(`amtStateFromAsNonRes: ${amtStateFromAsNonRes}`)
+            //Display total amount
+            console.log(document.querySelector('#amt_stateFrom_asNonRes'))
+            document.querySelector('#amt_stateFrom_asNonRes').textContent = amtStateFromAsNonRes
+
+        }else{
+            document.querySelector(`#amount3${numOfForms}`).textContent = this.amount - parAmount
+            //Add 
+            amtStateToAsNonRes += this.amount - parAmount
+            console.log(`amtStateToAsNonRes: ${amtStateToAsNonRes}`)
+            //Display total amount
+            console.log(document.querySelector('#amt_stateTo_asNonRes'))
+            document.querySelector('#amt_stateTo_asNonRes').textContent = amtStateToAsNonRes
+        }
     }
 }
 
@@ -43,8 +74,9 @@ class Investment {
     }
 }
 
-class UnEarnedIncome {
-    constructor (amount){
+class UnEarnedIncome extends UserInfo{
+    constructor (name, stateFrom, stateWork, stateTo, amount){
+        super (name, stateFrom, stateWork, stateTo)
         this.amount = amount
 
     }
@@ -53,20 +85,19 @@ class UnEarnedIncome {
     }
 }
 
-class UserInfo {
-    constructor(name, stateLive, stateWork){
-        this.name = name
-        this.stateLive = stateLive
-        this.stateWork = stateWork
-    }
-    
-}
 
+//users variables
 let primaryUser = null
 let secondaryUser = null
 //Number of income resources
 let numOfForms = 1
-
+//Variables to keep all amounts earned as resident as well as non-resident
+let amtStateFromAsRes = 0
+let amtStateFromAsNonRes = 0
+let amtStateToAsRes = 0
+let amtStateToAsNonRes = 0
+//Months in state live as resident
+let monthsLivedAsRes = 1
 
 const getDay = (aString) => {
     return aString.substring(8) 
@@ -116,25 +147,32 @@ const displayMonths = () =>{
 }
 
 const displayStateFromTo = () =>{
-    document.querySelector('#state_from').textContent = document.querySelector('#pr_stateLive').value
+    document.querySelector('#state_from').textContent = document.querySelector('#pr_stateFrom').value
     document.querySelector('#state_to').textContent = document.querySelector('#state_move').value
 }
 
 const createUsers = () => {
     console.log(`Called createUsers `)
-    console.log(` ${document.querySelector('#pr_stateLive').value}`)
+    console.log(` ${document.querySelector('#pr_stateFrom').value}`)
     primaryUser = new UserInfo
             (document.querySelector('#primary_name'), 
-            document.querySelector('#pr_stateLive').value,
+            document.querySelector('#pr_stateFrom').value,
             document.querySelector('#pr_stateWork').value)
-    console.log(`Primary User lived in: ${primaryUser.stateLive}`)
+    console.log(`Primary User lived in: ${primaryUser.stateFrom}`)
 
     secondaryUser = new UserInfo
             (document.querySelector('#secondary_name'), 
-            document.querySelector('#sec_stateLive').value,
+            document.querySelector('#sec_stateFrom').value,
             document.querySelector('#sec_stateWork').value)
     
     console.log(`Secondary User worked in: ${secondaryUser.stateWork}`)
+}
+//Primary & secondary taxpayer live in the same state
+//Display state live based on primary selection
+const setSecondaryStateFrom = () => {
+    console.log(`Called setSecondaryStateFrom `)
+    document.querySelector('#sec_stateFrom').value = document.querySelector('#pr_stateFrom').value
+
 }
 //Display user info 
 const setUserInfo = () =>{
@@ -142,18 +180,19 @@ const setUserInfo = () =>{
     displayMonths()
     //Display State From and State moved to
     displayStateFromTo()
-    console.log(`State live ${document.querySelector('#pr_stateLive').value}`)
+    console.log(`State live ${document.querySelector('#pr_stateFrom').value}`)
     createUsers()
+    setSecondaryStateFrom()
 
 }
 //Control all income sources received from tax forms
 //Add more sources if needed
-const incomeSources = ['W2-P', 'W2-S','1099-INT', '1099-DIV', 'SCH_D','UNEMPLOY', 'GAMBLING', 'OTHER']
+const incomeSources = ['W2-P', 'W2-S','1099-INT', '1099-DIV', '1099-B','UNEMPLOY', 'GAMBLING', 'OTHER']
 
 const incomeCategories = ['W2', 'Investment', 'UnearnedIncome']
 
 const createIncomeList = () =>{
-    const currTable = document.querySelector('.user_income')
+    let currTable = document.querySelector('.user_income')
     let newTr = document.createElement('tr')
     currTable.appendChild(newTr)
     //Create a new td to hold selected options
@@ -161,7 +200,8 @@ const createIncomeList = () =>{
     newTr.appendChild(newTd)
     //Create a list of tax forms
     let newSelect = document.createElement('select')
-    newSelect.setAttribute('id',`income_source`)
+    newSelect.setAttribute('id',`income_source${numOfForms}`)
+    // newSelect.setAttribute('onchange', 'assignIncomeSource()')
     currTable.appendChild(newSelect)
     for(let i =0;i<incomeSources.length;i++){
         let newOptionItem = document.createElement('option')
@@ -178,7 +218,8 @@ const createIncomeList = () =>{
     newInput.setAttribute('id', `input_amount${numOfForms}`)
     //Assign an "onchange"event to an input element
     newInput.setAttribute('onchange','addIncome()')
-    
+    //Assign an "onclick"event to check it has value or not
+    newInput.setAttribute('onclick','checkEmpty()')
     newTd.appendChild(newInput)
     //add 4 more td to hold calculations
     for (let i=0;i<4;i++){
@@ -187,22 +228,68 @@ const createIncomeList = () =>{
         newTr.appendChild(newTd)
         
     }
+    
 }
 
+// const assignIncomeSource = () =>{
+//     document.querySelector('#income_source').value
+//     console.log(`assignIncomeSource: ${document.querySelector('#income_source').value}`)
 
-
+// }
+const checkEmpty = () => {
+    const amount = document.querySelector(`#input_amount${numOfForms}`).value
+    console.log(`amount of income source: ${amount}`)
+}
 const addIncome = () => {
     console.log(`In addIncome`)
     const num = getNumOfMonthAsRes_StateFrom()
     const amount = document.querySelector(`#input_amount${numOfForms}`).value
-    
-    const option = document.querySelector('#income_source').value
-    console.log(`which income source: ${option}`)
     let parAmount = parseInt(amount/12*num)
     console.log(`entered amount: ${amount}`)
+    let option = document.querySelector(`#income_source${numOfForms}`).value
+    console.log(`which income source: ${option}`)
+
+    console.log(`which income source: ${option.includes('W2')}`)
+    if(option.includes('W2')){
+        if (option.includes('P')){
+            console.log(`Primary entered amount: ${amount}`)
+            let newW2 = new W2(primaryUser.name, primaryUser.stateFrom,
+                primaryUser.stateWork,primaryUser.stateTo, amount, num)
+            newW2.display()
+        }else {
+            console.log(`Secondary entered amount: ${amount}`)
+            let newW2 = new W2(secondaryUser.name, secondaryUser.stateFrom,
+                secondaryUser.stateWork,secondaryUser.stateTo, amount, num)
+            newW2.display()
+        }
+
+    }else if (option.includes('1099')){
+        let newInvestment = new Investment()
+
+    }else{
+        let newUnEarnedIncome = new UnEarnedIncome()
+    }
+
+    
     document.querySelector(`#amount0${numOfForms}`).textContent = parAmount
+    //Add 
+    amtStateFromAsRes += parAmount
+    console.log(`amtStateFromAsRes: ${amtStateFromAsRes}`)
+    //Display total amount
+    console.log(document.querySelector('#amt_stateFrom_asRes'))
+    document.querySelector('#amt_stateFrom_asRes').textContent = amtStateFromAsRes
+    
     document.querySelector(`#amount2${numOfForms}`).textContent = amount - parAmount
+    //Add 
+    amtStateToAsRes += (amount -parAmount)
+    console.log(`amtStateToAsRes: ${amtStateToAsRes}`)
+    //Display total amount
+    document.querySelector('#amt_stateTo_asRes').textContent = amtStateToAsRes
     //increase # of income sources
     numOfForms++
+}
+
+const calculation = () => {
+
 }
 
