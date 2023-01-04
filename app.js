@@ -42,21 +42,8 @@ class W2 extends UserInfo{
         let parAmount = this.amount - parseInt(this.amount/12*this.months)
         if (this.stateFrom == this.stateWork){
             document.querySelector(`#amount1${numOfForms}`).textContent = parAmount
-            //Add 
-            amtStateFromAsNonRes += parAmount
-            console.log(`amtStateFromAsNonRes: ${amtStateFromAsNonRes}`)
-            //Display total amount
-            console.log(document.querySelector('#amt_stateFrom_asNonRes'))
-            document.querySelector('#amt_stateFrom_asNonRes').textContent = amtStateFromAsNonRes
-
         }else{
             document.querySelector(`#amount3${numOfForms}`).textContent = this.amount - parAmount
-            //Add 
-            amtStateToAsNonRes += this.amount - parAmount
-            console.log(`amtStateToAsNonRes: ${amtStateToAsNonRes}`)
-            //Display total amount
-            console.log(document.querySelector('#amt_stateTo_asNonRes'))
-            document.querySelector('#amt_stateTo_asNonRes').textContent = amtStateToAsNonRes
         }
     }
 }
@@ -95,8 +82,6 @@ let amtStateFromAsRes = 0
 let amtStateFromAsNonRes = 0
 let amtStateToAsRes = 0
 let amtStateToAsNonRes = 0
-//Months in state live as resident
-let monthsLivedAsRes = 1
 
 const getDay = (aString) => {
     return aString.substring(8) 
@@ -189,6 +174,7 @@ const incomeCategories = ['W2', 'Investment', 'UnearnedIncome']
 const createIncomeList = () =>{
     let currTable = document.querySelector('.user_income')
     let newTr = document.createElement('tr')
+    newTr.classList.add('tax_form')
     currTable.appendChild(newTr)
     //Create a new td to hold selected options
     let newTd = document.createElement('td')
@@ -214,7 +200,7 @@ const createIncomeList = () =>{
     //Assign an "onchange"event to an input element
     newInput.setAttribute('onchange','addIncome()')
     //Assign an "onclick"event to check it has value or not
-    newInput.setAttribute('onclick','checkEmpty()')
+    // newInput.setAttribute('onclick','checkEmpty()')
     newTd.appendChild(newInput)
     //add 4 more td to hold calculations
     for (let i=0;i<4;i++){
@@ -222,13 +208,19 @@ const createIncomeList = () =>{
         newTd.setAttribute('id',`amount${[i.toString()+numOfForms.toString()]}`)
         newTr.appendChild(newTd)
     }
+    let deleteButton = document.createElement("button")
+    deleteButton.innerHTML = '<i class="fa-solid fa-trash-can"></i>'
+    deleteButton.classList.add('deleteIncome')
+    newTr.appendChild(deleteButton)
+
+    deleteButton.addEventListener('click', function(e){
+        let target = e.target
+        console.log(target)
+        target.parentElement.parentElement.remove()
+        //target.parentElement.remove()
+    })
 }
 
-
-const checkEmpty = () => {
-    const amount = document.querySelector(`#input_amount${numOfForms}`).value
-    console.log(`amount of income source: ${amount}`)
-}
 const addIncome = () => {
     console.log(`In addIncome`)
     const num = getNumOfMonthAsRes_StateFrom()
@@ -258,31 +250,46 @@ const addIncome = () => {
     }else{
         let newUnEarnedIncome = new UnEarnedIncome()
     }
-
-    
     document.querySelector(`#amount0${numOfForms}`).textContent = parAmount
-    //Add 
-    amtStateFromAsRes += parAmount
-    console.log(`amtStateFromAsRes: ${amtStateFromAsRes}`)
-    //Display total amount
-    console.log(document.querySelector('#amt_stateFrom_asRes'))
-    document.querySelector('#amt_stateFrom_asRes').textContent = amtStateFromAsRes
-    
+   
     document.querySelector(`#amount2${numOfForms}`).textContent = amount - parAmount
-    //Add 
-    amtStateToAsRes += (amount -parAmount)
-    console.log(`amtStateToAsRes: ${amtStateToAsRes}`)
-    //Display total amount
-    document.querySelector('#amt_stateTo_asRes').textContent = amtStateToAsRes
     //increase # of income sources
     numOfForms++
 }
 //To calculate tax credit
 const calculateCredit = () => {
+    const collection = document.getElementsByClassName('tax_form')
+    console.log(`In calculate ${collection.length}`)
+    
+    for (let i=0; i<collection.length;i++){
+    
+        if (collection[i].children[2].innerHTML !== ''){
+            amtStateFromAsRes += parseInt(collection[i].children[2].innerHTML)
+        }
+        
+        if (collection[i].children[3].innerHTML !== ''){
+            amtStateFromAsNonRes += parseInt(collection[i].children[3].innerHTML)
+        }
+        if (collection[i].children[4].innerHTML !== ''){
+            amtStateToAsRes += parseInt(collection[i].children[4].innerHTML)
+        }
+        if (collection[i].children[5].innerHTML !== ''){
+            amtStateToAsNonRes += parseInt(collection[i].children[5].innerHTML)
+        }
+        
+    }
+
+    document.querySelector('#amt_stateFrom_asRes').textContent = amtStateFromAsRes
+    document.querySelector('#amt_stateFrom_asNonRes').textContent = amtStateFromAsNonRes
+    document.querySelector('#amt_stateTo_asRes').textContent = amtStateToAsRes
+    document.querySelector('#amt_stateTo_asNonRes').textContent = amtStateToAsNonRes
+
     document.querySelector('#amt_to_asNonRes').textContent = amtStateToAsNonRes 
     document.querySelector('#amt_from_asNonRes').textContent = amtStateFromAsNonRes 
 
     document.querySelector('#credit_ratio_to').textContent = (amtStateToAsNonRes/         (amtStateToAsRes+ amtStateToAsNonRes)).toFixed(4)
     document.querySelector('#credit_ratio_from').textContent = (amtStateFromAsNonRes/ (amtStateFromAsRes+amtStateFromAsNonRes)).toFixed(4)
+
+    
 }
 
