@@ -97,47 +97,60 @@
                     <th>Resident</th>
                     <th>Non-Res</th>
                 </tr>
-                <tr class="column">
-                    <th>TOTAL</th>
-                    <th></th>
-                    <th id="amt_stateFrom_asRes">$</th>
-                    <th id="amt_stateFrom_asNonRes">$</th>
-                    <th id="amt_stateTo_asRes">$</th>
-                    <th id="amt_stateTo_asNonRes">$</th>
-                </tr>
             </table>
             <br>
             <button id="add_option" onclick="createIncomeList()">Add New Income Source</button>
             <button id="deleteBtn">
                 <i class="fa-solid fa-trash-alt" id="delete"></i>
             </button>
-            <button id="calculate">Calculate</button>
         </div>
     </section>
     <section class="state_credit">
         <div class="container">
             <table>
                 <tr class="column">
-                    <th id="state_from" colspan="3">NY</th>
-                    <th id="state_to" colspan="3">CT</th>
+                    <th  colspan="2"></th>
+                    <th id="state_from" colspan="2">NY</th>
+                    <th id="state_to" colspan="2">CT</th>
+                </tr>
+                <tr class="column">
+                    <th  colspan="2">TOTAL</th>
+                    <th id="amt_stateFrom_asRes">$</th>
+                    <th id="amt_stateFrom_asNonRes">$</th>
+                    <th id="amt_stateTo_asRes">$</th>
+                    <th id="amt_stateTo_asNonRes">$</th>
                 </tr>
                 <tr>
+                    <th colspan="2">Amount used for credit</th>
+                    <th id="amt_to_asNonRes"></th>
                     <th></th>
-                    <th></th>
-                    <th></th>
-                    <th></th>
-                    <th></th>
+                    <th id="amt_from_asNonRes"></th>
                     <th></th>
                 </tr>
                 <tr>
+                    <th colspan="2">Credit ratio</th>
+                    <th id="credit_ratio_to"></th>
                     <th></th>
+                    <th id="credit_ratio_from"></th>
                     <th></th>
+                </tr>
+                <tr>
+                    <th colspan="2">Tax</th>
+                    <th id="total_tax_to"></th>
                     <th></th>
+                    <th id="total_tax_from"></th>
                     <th></th>
+                </tr>
+                <tr>
+                    <th colspan="2">Credit Amount</th>
+                    <th id="credit_amt_to"></th>
                     <th></th>
+                    <th id="credit_amt_from"></th>
                     <th></th>
                 </tr>
             </table>
+            <br>
+            <button id="calculate" onclick = "calculateCredit()">Calculate</button>
         </div>
     </section>
 </body>

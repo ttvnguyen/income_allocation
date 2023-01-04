@@ -36,7 +36,6 @@ class W2 extends UserInfo{
         this.months = months
         console.log(`W2 class amount ${amount}`)
     }
-    
 
     display(){
         console.log (`In w2 Lived: ${this.stateFrom} Worked ${this.stateWork}`)
@@ -130,10 +129,6 @@ const getNumOfMonthAsRes_StateFrom = () => {
     }
     return currentMonth-1
 
-    // setTimeout(() => {
-    //     console.log(date_Entered);
-    // }, 4000)
-
 }
 
 //From information entered by user, calculate number of months lives as resident in the previous state asnd current state
@@ -226,16 +221,10 @@ const createIncomeList = () =>{
         newTd = document.createElement('td')
         newTd.setAttribute('id',`amount${[i.toString()+numOfForms.toString()]}`)
         newTr.appendChild(newTd)
-        
     }
-    
 }
 
-// const assignIncomeSource = () =>{
-//     document.querySelector('#income_source').value
-//     console.log(`assignIncomeSource: ${document.querySelector('#income_source').value}`)
 
-// }
 const checkEmpty = () => {
     const amount = document.querySelector(`#input_amount${numOfForms}`).value
     console.log(`amount of income source: ${amount}`)
@@ -288,8 +277,12 @@ const addIncome = () => {
     //increase # of income sources
     numOfForms++
 }
+//To calculate tax credit
+const calculateCredit = () => {
+    document.querySelector('#amt_to_asNonRes').textContent = amtStateToAsNonRes 
+    document.querySelector('#amt_from_asNonRes').textContent = amtStateFromAsNonRes 
 
-const calculation = () => {
-
+    document.querySelector('#credit_ratio_to').textContent = (amtStateToAsNonRes/         (amtStateToAsRes+ amtStateToAsNonRes)).toFixed(4)
+    document.querySelector('#credit_ratio_from').textContent = (amtStateFromAsNonRes/ (amtStateFromAsRes+amtStateFromAsNonRes)).toFixed(4)
 }
 
