@@ -37,13 +37,13 @@ class W2 extends UserInfo{
         console.log(`W2 class amount ${amount}`)
     }
 
-    display(){
+    display(num_id){
         console.log (`In w2 Lived: ${this.stateFrom} Worked ${this.stateWork}`)
         let parAmount = this.amount - parseInt(this.amount/12*this.months)
         if (this.stateFrom == this.stateWork){
-            document.querySelector(`#amount1${numOfForms}`).textContent = parAmount
+            document.querySelector(`#amount1${num_id}`).textContent = parAmount
         }else{
-            document.querySelector(`#amount3${numOfForms}`).textContent = this.amount - parAmount
+            document.querySelector(`#amount3${num_id}`).textContent = this.amount - parAmount
         }
     }
 }
@@ -77,11 +77,7 @@ let primaryUser = null
 let secondaryUser = null
 //Number of income resources
 let numOfForms = 1
-//Variables to keep all amounts earned as resident as well as non-resident
-let amtStateFromAsRes = 0
-let amtStateFromAsNonRes = 0
-let amtStateToAsRes = 0
-let amtStateToAsNonRes = 0
+
 
 const getDay = (aString) => {
     return aString.substring(8) 
@@ -172,6 +168,7 @@ const incomeSources = ['W2-P', 'W2-S','1099-INT', '1099-DIV', '1099-B','UNEMPLOY
 const incomeCategories = ['W2', 'Investment', 'UnearnedIncome']
 
 const createIncomeList = () =>{
+    
     let currTable = document.querySelector('.user_income')
     let newTr = document.createElement('tr')
     newTr.classList.add('tax_form')
@@ -182,7 +179,12 @@ const createIncomeList = () =>{
     //Create a list of tax forms
     let newSelect = document.createElement('select')
     newSelect.setAttribute('id',`income_source${numOfForms}`)
-    // newSelect.setAttribute('onchange', 'assignIncomeSource()')
+    //newSelect.setAttribute('change', 'assignIncomeSource()')
+    newSelect.addEventListener('change',function(e){
+        let target = e.target
+        console.log(`Change income source: ${target.value}`)
+        console.log(`Change income source: ${target.id}`)
+    })
     currTable.appendChild(newSelect)
     for(let i =0;i<incomeSources.length;i++){
         let newOptionItem = document.createElement('option')
@@ -198,9 +200,13 @@ const createIncomeList = () =>{
     newInput.setAttribute('type', 'number')
     newInput.setAttribute('id', `input_amount${numOfForms}`)
     //Assign an "onchange"event to an input element
-    newInput.setAttribute('onchange','addIncome()')
+    //newInput.setAttribute('onchange','addIncome()')
+    newInput.addEventListener('change', addIncome)
     //Assign an "onclick"event to check it has value or not
-    // newInput.setAttribute('onclick','checkEmpty()')
+    // newInput.addEventListener('change',function(e){
+    //     let target = e.target
+    //     console.log(`change amount: ${target.value}`)
+    // })
     newTd.appendChild(newInput)
     //add 4 more td to hold calculations
     for (let i=0;i<4;i++){
@@ -221,13 +227,18 @@ const createIncomeList = () =>{
     })
 }
 
-const addIncome = () => {
+const addIncome = (e) => {
     console.log(`In addIncome`)
     const num = getNumOfMonthAsRes_StateFrom()
-    const amount = document.querySelector(`#input_amount${numOfForms}`).value
+    // const amount = document.querySelector(`#input_amount${numOfForms}`).value
+    const target = e.target
+    const num_id = (target.id).slice(12)
+    const amount = target.value
+    console.log(`In addIncome target: ${target.id}`)
+    console.log(`In addIncome target: ${num_id}`)
     let parAmount = parseInt(amount/12*num)
     console.log(`entered amount: ${amount}`)
-    let option = document.querySelector(`#income_source${numOfForms}`).value
+    let option = document.querySelector(`#income_source${num_id}`).value
     console.log(`which income source: ${option}`)
 
     console.log(`which income source: ${option.includes('W2')}`)
@@ -236,12 +247,12 @@ const addIncome = () => {
             console.log(`Primary entered amount: ${amount}`)
             let newW2 = new W2(primaryUser.name, primaryUser.stateFrom,
                 primaryUser.stateWork,primaryUser.stateTo, amount, num)
-            newW2.display()
+            newW2.display(num_id)
         }else {
             console.log(`Secondary entered amount: ${amount}`)
             let newW2 = new W2(secondaryUser.name, secondaryUser.stateFrom,
                 secondaryUser.stateWork,secondaryUser.stateTo, amount, num)
-            newW2.display()
+            newW2.display(num_id)
         }
 
     }else if (option.includes('1099')){
@@ -250,14 +261,22 @@ const addIncome = () => {
     }else{
         let newUnEarnedIncome = new UnEarnedIncome()
     }
-    document.querySelector(`#amount0${numOfForms}`).textContent = parAmount
+    document.querySelector(`#amount0${num_id}`).textContent = parAmount
    
-    document.querySelector(`#amount2${numOfForms}`).textContent = amount - parAmount
+    document.querySelector(`#amount2${num_id}`).textContent = amount - parAmount
     //increase # of income sources
     numOfForms++
 }
+const assignIncomeSource = (e) => {
+    console.log(`In assignIncomeSource: ${e.target.value}`)
+}
 //To calculate tax credit
 const calculateCredit = () => {
+    //Variables to keep all amounts earned as resident as well as non-resident
+    let amtStateFromAsRes = 0
+    let amtStateFromAsNonRes = 0
+    let amtStateToAsRes = 0
+    let amtStateToAsNonRes = 0
     const collection = document.getElementsByClassName('tax_form')
     console.log(`In calculate ${collection.length}`)
     
