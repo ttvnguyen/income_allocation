@@ -14,12 +14,26 @@
             <ul class="nav">
                 <h3>Income Allocation Worksheet - Tax Year 2022</h3>
                 <li>
-                    <a href="#">about</a>
+                    <a href="#" title="This app is used by tax-pros to calculate credit amount">about</a>
                   </li>
                   <li>
-                    <a href="#">how to use</a>
+                    <a href="#" id="modal-nav">how to use</a>
                   </li>
             </ul>
+        </div>
+        <div class="modal">
+            <div class="modal-content">
+                <span class="close-btn">&times;</span>
+                <p>Step 1: For primary taxpayer, enter their first name, select the state they lived in, select the state they worked in</p>
+                <p>&nbsp&nbsp&nbsp&nbsp&nbsp&nbspRepeat for secondary taxpayer if needed</p>
+                <p>&nbsp&nbsp&nbsp&nbsp&nbsp&nbspSelect the state the client moved to and when. Then, click SUBMIT button</p>
+                <p>Step 2: Click "Add New Income Source" </p>
+                <p>&nbsp&nbsp&nbsp&nbsp&nbsp&nbspSelect an income source and enter a whole amount only</p>
+                <p>&nbsp&nbsp&nbsp&nbsp&nbsp&nbspRepeat Step 2 for all client's income sources</p>
+                <p>&nbsp&nbsp&nbsp&nbsp&nbsp&nbspTo delete an Income Source, click the trash icon</p>
+                <p>Step 3: Click "Calculate" button</p>
+                <p>&nbsp&nbsp&nbsp&nbsp&nbsp&nbspUse "Credit Amount" at the bottom of each state to enter into the client income tax return</p>
+            </div>
         </div>
     </nav>
     <section class="user_info">
@@ -67,7 +81,7 @@
                     <option value="MA">Massachusetts</option>
                 </select>
             </div>    
-            <label>When:
+            <label>When:&nbsp&nbsp&nbsp&nbsp&nbsp
                     <input type="date" id="moved_date" value="2022-06-01" min="2022-01-01" max="2022-12-31" required /></label>
             <button id="submit_user_info" onclick="setUserInfo()">Submit</button>
         </div>
@@ -100,7 +114,6 @@
             </table>
             <br>
             <button id="add_option" onclick="createIncomeList()">Add New Income Source</button>
-            
         </div>
     </section>
     <section class="state_credit">
@@ -131,7 +144,6 @@
                     <th id="credit_ratio_to"></th>
                     <th></th>
                     <th id="credit_ratio_from"></th>
-                    
                 </tr>
                 <tr>
                     <th colspan="2">Tax</th>
@@ -139,7 +151,6 @@
                     <th id="total_tax_to"></th>
                     <th></th>
                     <th id="total_tax_from"></th>
-                    
                 </tr>
                 <tr>
                     <th colspan="2">Credit Amount</th>
@@ -147,7 +158,6 @@
                     <th id="credit_amt_to"></th>
                     <th></th>
                     <th id="credit_amt_from"></th>
-                    
                 </tr>
             </table>
             <br>
