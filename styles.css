@@ -24,10 +24,13 @@ ul {
    }
     
    .navbar {
+    max-width: 900px;
+    margin: 0 auto;
     background: gainsboro;
     color: #fff;
     height: 60px;
    }
+
    .navbar a {
     color: #fff;
     text-decoration: none;
@@ -61,27 +64,29 @@ ul {
    }
 
    .user_info .container .primary {
-    display: flex;
     flex-direction: row;
    }
    .user_info .container .secondary {
-    display: flex;
     flex-direction: row;
    }
 
    .user_info .container .states{
-    display: flex;
     flex-direction: row;
-    /* justify-content:space-around; */
    }
    
    table, th, td {
     border:1px solid black;
-  }
+   }
 
    table {
     width: 100%;
-  }
+   }
+
+   button {
+      background-color: grey;
+      color:beige;
+      border-radius: 5px;
+   }
 
 .modal {
   display: none;
@@ -104,6 +109,7 @@ ul {
   width: 75%; 
   border: 2px solid black;
   border-radius: 5px; 
+  overflow: scroll; /* Show scrollbars */
   -webkit-animation-name: animatetop;
   -webkit-animation-duration: 0.4s;
   animation-name: animatetop;

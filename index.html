@@ -14,7 +14,7 @@
             <ul class="nav">
                 <h3>Income Allocation Worksheet - Tax Year 2022</h3>
                 <li>
-                    <a href="#" title="This app is used by tax-pros to calculate credit amount">about</a>
+                    <a href="#" title="This app is used by tax-pros to calculate tax credit amount">about</a>
                   </li>
                   <li>
                     <a href="#" id="modal-nav">how to use</a>
@@ -59,13 +59,13 @@
             <div class="secondary">
                 <label><strong>S</strong>econdary taxpayer</label>
                 <input type="text" id="secondary_name" placeholder="Taxpayer Name">
-                <label>&nbspLived in</label><select id="sec_stateFrom" name="states" disabled>
+                <label>&nbspLived in </label><select id="sec_stateFrom" name="states" disabled>
                     <option value="CT">Connecticut</option>
                     <option value="NJ">New Jersey</option>
                     <option value="NY" selected>New York</option>
                     <option value="MA">Massachusetts</option>
                 </select>
-                <label>&nbspWorked in</label><select id="sec_stateWork" name="states">
+                <label>&nbspWorked in </label><select id="sec_stateWork" name="states">
                     <option value="CT">Connecticut</option>
                     <option value="NJ">New Jersey</option>
                     <option value="NY">New York</option>
@@ -83,19 +83,20 @@
             </div>    
             <label>When:&nbsp&nbsp&nbsp&nbsp&nbsp
                     <input type="date" id="moved_date" value="2022-06-01" min="2022-01-01" max="2022-12-31" required /></label>
+            <br>
             <button id="submit_user_info" onclick="setUserInfo()">Submit</button>
         </div>
     </section>
     <section class="section_user_income">
         <div class="container">
             <table class="user_income">
-                <tr class="column">
+                <tr>
                     <th></th>
                     <th></th>
                     <th id="state_from" colspan="2">NY</th>
                     <th id="state_to" colspan="2">CT</th>
                 </tr>
-                <tr class="column">
+                <tr>
                     <th></th>
                     <th></th>
                     <th id="months_in_stateFrom_asRes">5 months</th>
@@ -103,7 +104,7 @@
                     <th id="months_in_stateTo_asRes">5 months</th>
                     <th id="months_in_stateTo_asNonRes">7 monhs</th>
                 </tr>
-                <tr class="column">
+                <tr>
                     <th>Income Resources</th>
                     <th>Amount</th>
                     <th>Resident </th>
@@ -119,13 +120,13 @@
     <section class="state_credit">
         <div class="container">
             <table>
-                <tr class="column">
-                    <th  colspan="2"></th>
+                <tr>
+                    <th colspan="2"></th>
                     <th id="state_from" colspan="2">NY</th>
                     <th id="state_to" colspan="2">CT</th>
                 </tr>
-                <tr class="column">
-                    <th  colspan="2">TOTAL</th>
+                <tr>
+                    <th colspan="2">TOTAL</th>
                     <th id="amt_stateFrom_asRes">$</th>
                     <th id="amt_stateFrom_asNonRes">$</th>
                     <th id="amt_stateTo_asRes">$</th>
@@ -164,6 +165,11 @@
             <button id="calculate" onclick = "calculateCredit()">Calculate</button>
         </div>
     </section>
+    <div class="container">
+        <footer class="footer">
+            <small>&copy By Vi Nguyen, 2023</small>
+        </footer>
+    </div>
 </body>
 <script src="./app.js"></script>
 </html>
