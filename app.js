@@ -1,25 +1,40 @@
 
-// window.onload = (event) =>{
-//     var myHeaders = new Headers();
+// const getStateRate = (state) => {
+//     //Free API KEY
+//     let myHeaders = new Headers();
 //     myHeaders.append("apikey", "rafMALf5ceSMAeAQ1r8DVbY316taWw1g");
 
-//     var requestOptions = {
-//     method: 'GET',
-//     redirect: 'follow',
-//     headers: myHeaders
+//     let requestOptions = {
+//         method: 'GET',
+//         redirect: 'follow',
+//         headers: myHeaders
 //     };
 
-//     const ct_data =  fetch("https://api.apilayer.com/tax_data/us_rate_list?state=CT", requestOptions)
-//     .then(response => response.text())
-//     .then(result => console.log(result))
-//     .catch(error => console.log('error', error));
-
+//     const state_data =  fetch(`https://api.apilayer.com/tax_data/us_rate_list?state=${state}`, requestOptions)
+//         .then(response => response.text())
+//         .then(result => console.log(result))
+//         .catch(error => console.log('error', error));
+        
+//     //console.log(state_data)
+//     return state_data.data[0].combined_rate
 // }
 
+const getStateRate = (state) => {
+    const state_data_CT = {"data":[{"zip":"06001","country":"US","state":"CT","state_rate":0.0635,"county":"HARTFORD","county_rate":0,"city":"AVON","city_rate":0,"combined_district_rate":0,"combined_rate":0.0635,"combined_use_rate":0.0635,"freight_taxable":true},{"zip":"06002","country":"US","state":"CT","state_rate":0.0635,"county":"HARTFORD","county_rate":0,"city":"BLOOMFIELD","city_rate":0,"combined_district_rate":0,"combined_rate":0.0635,"combined_use_rate":0.0635,"freight_taxable":true}]}
+    
+    const state_data_NY = {"data":[{"zip":"00501","country":"US","state":"NY","state_rate":0.04,"county":"SUFFOLK","county_rate":0.04625,"city":"HOLTSVILLE","city_rate":0,"combined_district_rate":0.04625,"combined_rate":0.08625,"combined_use_rate":0.08625,"freight_taxable":true},{"zip":"00544","country":"US","state":"NY","state_rate":0.04,"county":"SUFFOLK","county_rate":0.04625,"city":"HOLTSVILLE","city_rate":0,"combined_district_rate":0.04625,"combined_rate":0.08625,"combined_use_rate":0.08625,"freight_taxable":true}]} 
 
-const ct_data = {"data":[{"zip":"06001","country":"US","state":"CT","state_rate":0.0635,"county":"HARTFORD","county_rate":0,"city":"AVON","city_rate":0,"combined_district_rate":0,"combined_rate":0.0635,"combined_use_rate":0.0635,"freight_taxable":true},{"zip":"06002","country":"US","state":"CT","state_rate":0.0635,"county":"HARTFORD","county_rate":0,"city":"BLOOMFIELD","city_rate":0,"combined_district_rate":0,"combined_rate":0.0635,"combined_use_rate":0.0635,"freight_taxable":true},{"zip":"06006","country":"US","state":"CT","state_rate":0.0635,"county":"HARTFORD","county_rate":0,"city":"WINDSOR","city_rate":0,"combined_district_rate":0,"combined_rate":0.0635,"combined_use_rate":0.0635,"freight_taxable":true},{"zip":"06010","country":"US","state":"CT","state_rate":0.0635,"county":"HARTFORD","county_rate":0,"city":"BRISTOL","city_rate":0,"combined_district_rate":0,"combined_rate":0.0635,"combined_use_rate":0.0635,"freight_taxable":true},{"zip":"06011","country":"US","state":"CT","state_rate":0.0635,"county":"HARTFORD","county_rate":0,"city":"BRISTOL","city_rate":0,"combined_district_rate":0,"combined_rate":0.0635,"combined_use_rate":0.0635,"freight_taxable":true},{"zip":"06013","country":"US","state":"CT","state_rate":0.0635,"county":"HARTFORD","county_rate":0,"city":"BURLINGTON","city_rate":0,"combined_district_rate":0,"combined_rate":0.0635,"combined_use_rate":0.0635,"freight_taxable":true},{"zip":"06016","country":"US","state":"CT","state_rate":0.0635,"county":"HARTFORD","county_rate":0,"city":"BROAD BROOK","city_rate":0,"combined_district_rate":0,"combined_rate":0.0635,"combined_use_rate":0.0635,"freight_taxable":true},{"zip":"06018","country":"US","state":"CT","state_rate":0.0635,"county":"LITCHFIELD","county_rate":0,"city":"CANAAN","city_rate":0,"combined_district_rate":0,"combined_rate":0.0635,"combined_use_rate":0.0635,"freight_taxable":true},{"zip":"06019","country":"US","state":"CT","state_rate":0.0635,"county":"HARTFORD","county_rate":0,"city":"CANTON","city_rate":0,"combined_district_rate":0,"combined_rate":0.0635,"combined_use_rate":0.0635,"freight_taxable":true},{"zip":"06020","country":"US","state":"CT","state_rate":0.0635,"county":"HARTFORD","county_rate":0,"city":"CANTON CENTER","city_rate":0,"combined_district_rate":0,"combined_rate":0.0635,"combined_use_rate":0.0635,"freight_taxable":true}]}
+    if (state === 'CT'){
+        console.log(`CT state rate =  ${state_data_CT.data[0].combined_rate} `)
+        return state_data_CT.data[0].combined_rate
+    }else {
+        console.log(`NY state rate =  ${state_data_NY.data[0].combined_rate} `)
+        state_data_NY.data[0].combined_rate
+    }
+}
 
-// console.log(ct_data)
+
+
 //Add "how to use" modal 
 let modalBtn = document.getElementById("modal-nav")
 let modal = document.querySelector(".modal")
@@ -322,7 +337,29 @@ const calculateCredit = () => {
     document.querySelector('#amt_to_asNonRes').textContent = amtStateToAsNonRes 
     document.querySelector('#amt_from_asNonRes').textContent = amtStateFromAsNonRes 
 
-    document.querySelector('#credit_ratio_to').textContent = (amtStateToAsNonRes/         (amtStateToAsRes+ amtStateToAsNonRes)).toFixed(4)
-    document.querySelector('#credit_ratio_from').textContent = (amtStateFromAsNonRes/ (amtStateFromAsRes+amtStateFromAsNonRes)).toFixed(4)
+    let credit_ratio_from = (amtStateFromAsNonRes/ (amtStateFromAsRes+amtStateFromAsNonRes)).toFixed(4)
+    let credit_ratio_to = (amtStateToAsNonRes/(amtStateToAsRes+ amtStateToAsNonRes)).toFixed(4)
+    
+     
+    document.querySelector('#credit_ratio_from').textContent = credit_ratio_from
+    document.querySelector('#credit_ratio_to').textContent = credit_ratio_to
+    
+    //Call getStateRate to get state rate
+    const state_from_rate = getStateRate(primaryUser.stateFrom)
+    console.log(`State From: ${primaryUser.stateFrom}`)
+    const state_to_rate = getStateRate(primaryUser.stateTo)
+    console.log(`State To: ${primaryUser.stateTo}`)
+
+    let total_tax_from = (amtStateFromAsRes+ amtStateFromAsNonRes) * state_from_rate
+    console.log(`total_tax_from: ${total_tax_from}`)
+    document.querySelector('#total_tax_from').textContent = total_tax_from
+
+    let total_tax_to = (amtStateToAsRes+ amtStateToAsNonRes) * state_to_rate
+    console.log(`total_tax_to: ${total_tax_to}`)
+    document.querySelector('#total_tax_to').textContent = total_tax_to
+
+    document.querySelector('#credit_amt_from').textContent = state_from_rate * total_tax_from
+
+    document.querySelector('#credit_amt_to').textContent = state_to_rate * total_tax_to
 }
 
