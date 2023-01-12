@@ -19,6 +19,7 @@
 //     return state_data.data[0].combined_rate
 // }
 
+//Testing data to return state rate 
 const getStateRate = (state) => {
     const state_data_CT = {"data":[{"zip":"06001","country":"US","state":"CT","state_rate":0.0635,"county":"HARTFORD","county_rate":0,"city":"AVON","city_rate":0,"combined_district_rate":0,"combined_rate":0.0635,"combined_use_rate":0.0635,"freight_taxable":true},{"zip":"06002","country":"US","state":"CT","state_rate":0.0635,"county":"HARTFORD","county_rate":0,"city":"BLOOMFIELD","city_rate":0,"combined_district_rate":0,"combined_rate":0.0635,"combined_use_rate":0.0635,"freight_taxable":true}]}
     
@@ -29,11 +30,9 @@ const getStateRate = (state) => {
         return state_data_CT.data[0].combined_rate
     }else {
         console.log(`NY state rate =  ${state_data_NY.data[0].combined_rate} `)
-        state_data_NY.data[0].combined_rate
+        return state_data_NY.data[0].combined_rate
     }
 }
-
-
 
 //Add "how to use" modal 
 let modalBtn = document.getElementById("modal-nav")
@@ -57,19 +56,21 @@ class UserInfo {
         this.name = name
         this.stateFrom = stateFrom
         this.stateWork = stateWork
+        this.stateTo = stateTo
     }
 }
 
+//Class W2 contains UserInfo parameters plus input amount and months lived in the previous state
 class W2 extends UserInfo{
     constructor (name, stateFrom, stateWork, stateTo, amount, months){
         super(name, stateFrom, stateWork, stateTo)
         this.amount = amount
         this.months = months
-        console.log(`W2 class amount ${amount}`)
+        // console.log(`W2 class amount ${amount}`)
+        // console.log(`W2 class stateTo ${stateTo}`)
     }
-
     display(num_id){
-        console.log (`In w2 Lived: ${this.stateFrom} Worked ${this.stateWork}`)
+        // console.log (`In w2 Lived: ${this.stateFrom} Worked ${this.stateWork}`)
         let parAmount = this.amount - parseInt(this.amount/12*this.months)
         if (this.stateFrom == this.stateWork){
             document.querySelector(`#amount1${num_id}`).textContent = parAmount
@@ -79,27 +80,17 @@ class W2 extends UserInfo{
     }
 }
 
-class Investment {
-    constructor (amount, monthsOldRes, monthsNewRes){
-        this.amount = amount
-        this.monthsOldRes = monthsOldRes
-        this.monthsNewRes = monthsNewRes
-
-    }
-    display(){
-        console.log (`In Investment`)
-    }
-}
-
+//Class UnEarnedIncome contains UserInfo parameters plus input amount
 class UnEarnedIncome {
     constructor (sourceId, amount){
         this.sourceId = sourceId
         this.amount = amount
     }
     display(num_id){
-        console.log (`In UnEarnedIncome`)
+        //sourceId = income_source1 
         const x = this.sourceId[this.sourceId.length - 1]
-        console.log (`In UnEarnedIncome ${x}`)
+        // console.log (`In UnEarnedIncome ${x}`)
+        //1 for state from; 2 for state to
         if (parseInt(x) === 1){
             document.querySelector(`#amount0${num_id}`).textContent = this.amount
         }
@@ -113,7 +104,7 @@ class UnEarnedIncome {
 //users variables
 let primaryUser = null
 let secondaryUser = null
-//Number of income resources
+//Number of income sources
 let numOfForms = 1
 
 //Get a day entered
@@ -159,24 +150,34 @@ const displayMonths = () =>{
 
 //Display state from and state to
 const displayStateFromTo = () =>{
-    document.querySelector('#state_from').textContent = document.querySelector('#pr_stateFrom').value
-    document.querySelector('#state_to').textContent = document.querySelector('#state_move').value
+    let collection = document.getElementsByClassName('state_from')
+    for (let i=0;i<collection.length; i++){
+        collection[i].textContent = document.querySelector('#pr_stateFrom').value
+        collection[i].style.color = "red"
+    }
+    collection = document.getElementsByClassName('state_to')
+    for (let i=0;i<collection.length; i++){
+        collection[i].textContent = document.querySelector('#state_move').value
+        collection[i].style.color = "blue"
+    }
 }
 
 //Create primary and secondary users
 const createUsers = () => {
     console.log(`Called createUsers `)
-    console.log(` ${document.querySelector('#pr_stateFrom').value}`)
+    console.log(`Primary moved to: ${document.querySelector('#state_move').value}`)
     primaryUser = new UserInfo
             (document.querySelector('#primary_name'), 
             document.querySelector('#pr_stateFrom').value,
-            document.querySelector('#pr_stateWork').value)
+            document.querySelector('#pr_stateWork').value,
+            document.querySelector('#state_move').value)
     //console.log(`Primary User lived in: ${primaryUser.stateFrom}`)
 
     secondaryUser = new UserInfo
             (document.querySelector('#secondary_name'), 
             document.querySelector('#sec_stateFrom').value,
-            document.querySelector('#sec_stateWork').value)
+            document.querySelector('#sec_stateWork').value,
+            document.querySelector('#state_move').value)
     
     //console.log(`Secondary User worked in: ${secondaryUser.stateWork}`)
 }
@@ -309,14 +310,13 @@ const calculateCredit = () => {
     let amtStateToAsRes = 0
     let amtStateToAsNonRes = 0
     const collection = document.getElementsByClassName('tax_form')
-    console.log(`In calculate ${collection.length}`)
+    // console.log(`In calculate ${collection.length}`)
     
+    //Loop through all income sources to add money at each column
     for (let i=0; i<collection.length;i++){
-    
         if (collection[i].children[2].innerHTML !== ''){
             amtStateFromAsRes += parseInt(collection[i].children[2].innerHTML)
         }
-        
         if (collection[i].children[3].innerHTML !== ''){
             amtStateFromAsNonRes += parseInt(collection[i].children[3].innerHTML)
         }
@@ -326,40 +326,50 @@ const calculateCredit = () => {
         if (collection[i].children[5].innerHTML !== ''){
             amtStateToAsNonRes += parseInt(collection[i].children[5].innerHTML)
         }
-        
     }
 
     document.querySelector('#amt_stateFrom_asRes').textContent = amtStateFromAsRes
     document.querySelector('#amt_stateFrom_asNonRes').textContent = amtStateFromAsNonRes
+    document.querySelector('#amt_stateFrom_asNonRes').style.color = "red"
+
     document.querySelector('#amt_stateTo_asRes').textContent = amtStateToAsRes
     document.querySelector('#amt_stateTo_asNonRes').textContent = amtStateToAsNonRes
+    document.querySelector('#amt_stateTo_asNonRes').style.color = "blue"
 
-    document.querySelector('#amt_to_asNonRes').textContent = amtStateToAsNonRes 
+    document.querySelector('#amt_to_asNonRes').textContent = amtStateToAsNonRes
+    document.querySelector('#amt_to_asNonRes').style.color = "blue" 
     document.querySelector('#amt_from_asNonRes').textContent = amtStateFromAsNonRes 
+    document.querySelector('#amt_from_asNonRes').style.color = "red" 
 
-    let credit_ratio_from = (amtStateFromAsNonRes/ (amtStateFromAsRes+amtStateFromAsNonRes)).toFixed(4)
-    let credit_ratio_to = (amtStateToAsNonRes/(amtStateToAsRes+ amtStateToAsNonRes)).toFixed(4)
-    
+    let credit_ratio_from = 0
+    let credit_ratio_to = 0
+    let total_tax_from = 0
+    let total_tax_to = 0
+    let state_from_rate = 0
+    let state_to_rate = 0
+
+    if (amtStateFromAsNonRes !== 0){
+        credit_ratio_from = (amtStateFromAsNonRes/ (amtStateFromAsRes+amtStateFromAsNonRes)).toFixed(4)
+        //Call getStateRate to get state rate
+        state_from_rate = getStateRate(primaryUser.stateFrom)
+        console.log(`State From: ${primaryUser.stateFrom}`)
+        total_tax_from = Math.floor((amtStateFromAsRes + amtStateFromAsNonRes) * state_from_rate)
+        console.log(`total_tax_from: ${amtStateFromAsRes} ${amtStateFromAsNonRes} ${state_from_rate} ${total_tax_from}`)
+    }
+    if (amtStateToAsNonRes !== 0){
+        credit_ratio_to = (amtStateToAsNonRes/(amtStateToAsRes+ amtStateToAsNonRes)).toFixed(4)
+        //Call getStateRate to get state rate
+        state_to_rate = getStateRate(primaryUser.stateTo)
+        console.log(`State To: ${primaryUser.stateTo}`)
+        total_tax_to = Math.floor((amtStateToAsRes + amtStateToAsNonRes) * state_to_rate)
+        console.log(`total_tax_to: ${amtStateToAsRes} ${amtStateToAsNonRes} ${total_tax_to}`)
+    }
      
     document.querySelector('#credit_ratio_from').textContent = credit_ratio_from
     document.querySelector('#credit_ratio_to').textContent = credit_ratio_to
-    
-    //Call getStateRate to get state rate
-    const state_from_rate = getStateRate(primaryUser.stateFrom)
-    console.log(`State From: ${primaryUser.stateFrom}`)
-    const state_to_rate = getStateRate(primaryUser.stateTo)
-    console.log(`State To: ${primaryUser.stateTo}`)
-
-    let total_tax_from = (amtStateFromAsRes+ amtStateFromAsNonRes) * state_from_rate
-    console.log(`total_tax_from: ${total_tax_from}`)
     document.querySelector('#total_tax_from').textContent = total_tax_from
-
-    let total_tax_to = (amtStateToAsRes+ amtStateToAsNonRes) * state_to_rate
-    console.log(`total_tax_to: ${total_tax_to}`)
     document.querySelector('#total_tax_to').textContent = total_tax_to
-
-    document.querySelector('#credit_amt_from').textContent = state_from_rate * total_tax_from
-
-    document.querySelector('#credit_amt_to').textContent = state_to_rate * total_tax_to
+    document.querySelector('#credit_amt_from').textContent = Math.floor(state_from_rate * total_tax_from)
+    document.querySelector('#credit_amt_to').textContent = Math.floor(state_to_rate * total_tax_to)
 }
 
