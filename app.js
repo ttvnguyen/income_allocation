@@ -1,38 +1,44 @@
+//Fetch API 
+const getStateRate = async (state) => {
+    //Free API KEY
+    let myHeaders = new Headers();
+    myHeaders.append("apikey", "rafMALf5ceSMAeAQ1r8DVbY316taWw1g");
 
-// const getStateRate = (state) => {
-//     //Free API KEY
-//     let myHeaders = new Headers();
-//     myHeaders.append("apikey", "rafMALf5ceSMAeAQ1r8DVbY316taWw1g");
+    let requestOptions = {
+        method: 'GET',
+        redirect: 'follow',
+        headers: myHeaders
+    };
 
-//     let requestOptions = {
-//         method: 'GET',
-//         redirect: 'follow',
-//         headers: myHeaders
-//     };
-
-//     const state_data =  fetch(`https://api.apilayer.com/tax_data/us_rate_list?state=${state}`, requestOptions)
-//         .then(response => response.text())
-//         .then(result => console.log(result))
-//         .catch(error => console.log('error', error));
+    
+    let job = fetch(`https://api.apilayer.com/tax_data/us_rate_list?state=${state}`, requestOptions)
+        .then(response => {return response.json()})
+        // .then(result => {
+        //     console.log(`RESULT RECEIVED: ${result}`)
+        //     state_data = result
+        // })
+        .catch(error => {console.log('error', error)
+                         return null})
         
-//     //console.log(state_data)
-//     return state_data.data[0].combined_rate
-// }
+    let state_data = await Promise.all([job]);
+    // console.log(`In getStateRate : ${state_data}`)
+    return state_data
+}
 
 //Testing data to return state rate 
-const getStateRate = (state) => {
-    const state_data_CT = {"data":[{"zip":"06001","country":"US","state":"CT","state_rate":0.0635,"county":"HARTFORD","county_rate":0,"city":"AVON","city_rate":0,"combined_district_rate":0,"combined_rate":0.0635,"combined_use_rate":0.0635,"freight_taxable":true},{"zip":"06002","country":"US","state":"CT","state_rate":0.0635,"county":"HARTFORD","county_rate":0,"city":"BLOOMFIELD","city_rate":0,"combined_district_rate":0,"combined_rate":0.0635,"combined_use_rate":0.0635,"freight_taxable":true}]}
+// const getStateRate = (state) => {
+//     const state_data_CT = {"data":[{"zip":"06001","country":"US","state":"CT","state_rate":0.0635,"county":"HARTFORD","county_rate":0,"city":"AVON","city_rate":0,"combined_district_rate":0,"combined_rate":0.0635,"combined_use_rate":0.0635,"freight_taxable":true},{"zip":"06002","country":"US","state":"CT","state_rate":0.0635,"county":"HARTFORD","county_rate":0,"city":"BLOOMFIELD","city_rate":0,"combined_district_rate":0,"combined_rate":0.0635,"combined_use_rate":0.0635,"freight_taxable":true}]}
     
-    const state_data_NY = {"data":[{"zip":"00501","country":"US","state":"NY","state_rate":0.04,"county":"SUFFOLK","county_rate":0.04625,"city":"HOLTSVILLE","city_rate":0,"combined_district_rate":0.04625,"combined_rate":0.08625,"combined_use_rate":0.08625,"freight_taxable":true},{"zip":"00544","country":"US","state":"NY","state_rate":0.04,"county":"SUFFOLK","county_rate":0.04625,"city":"HOLTSVILLE","city_rate":0,"combined_district_rate":0.04625,"combined_rate":0.08625,"combined_use_rate":0.08625,"freight_taxable":true}]} 
+//     const state_data_NY = {"data":[{"zip":"00501","country":"US","state":"NY","state_rate":0.04,"county":"SUFFOLK","county_rate":0.04625,"city":"HOLTSVILLE","city_rate":0,"combined_district_rate":0.04625,"combined_rate":0.08625,"combined_use_rate":0.08625,"freight_taxable":true},{"zip":"00544","country":"US","state":"NY","state_rate":0.04,"county":"SUFFOLK","county_rate":0.04625,"city":"HOLTSVILLE","city_rate":0,"combined_district_rate":0.04625,"combined_rate":0.08625,"combined_use_rate":0.08625,"freight_taxable":true}]} 
 
-    if (state === 'CT'){
-        console.log(`CT state rate =  ${state_data_CT.data[0].combined_rate} `)
-        return state_data_CT.data[0].combined_rate
-    }else {
-        console.log(`NY state rate =  ${state_data_NY.data[0].combined_rate} `)
-        return state_data_NY.data[0].combined_rate
-    }
-}
+//     if (state === 'CT'){
+//         console.log(`CT state rate =  ${state_data_CT.data[0].combined_rate} `)
+//         return state_data_CT.data[0].combined_rate
+//     }else {
+//         console.log(`NY state rate =  ${state_data_NY.data[0].combined_rate} `)
+//         return state_data_NY.data[0].combined_rate
+//     }
+// }
 
 //Add "how to use" modal 
 let modalBtn = document.getElementById("modal-nav")
@@ -303,7 +309,7 @@ const addIncome = (e) => {
 }
 
 //To calculate tax credit
-const calculateCredit = () => {
+const calculateCredit = async () => {
     //Variables to keep all amounts earned as resident as well as non-resident
     let amtStateFromAsRes = 0
     let amtStateFromAsNonRes = 0
@@ -351,25 +357,36 @@ const calculateCredit = () => {
     if (amtStateFromAsNonRes !== 0){
         credit_ratio_from = (amtStateFromAsNonRes/ (amtStateFromAsRes+amtStateFromAsNonRes)).toFixed(4)
         //Call getStateRate to get state rate
-        state_from_rate = getStateRate(primaryUser.stateFrom)
-        console.log(`State From: ${primaryUser.stateFrom}`)
-        total_tax_from = Math.floor((amtStateFromAsRes + amtStateFromAsNonRes) * state_from_rate)
-        console.log(`total_tax_from: ${amtStateFromAsRes} ${amtStateFromAsNonRes} ${state_from_rate} ${total_tax_from}`)
+        //state_from_rate = getStateRate(primaryUser.stateFrom)
+        ret = getStateRate(primaryUser.stateFrom)
+        ret.then((value) => {
+            state_from_rate = value[0].data[0].combined_rate
+            // console.log(`State From: ${primaryUser.stateFrom}`)
+            total_tax_from = Math.floor((amtStateFromAsRes + amtStateFromAsNonRes) * state_from_rate)
+            console.log(`total_tax_from: ${amtStateFromAsRes} ${amtStateFromAsNonRes} ${state_from_rate} ${total_tax_from}`)
+            document.querySelector('#total_tax_from').textContent = total_tax_from
+            document.querySelector('#credit_amt_from').textContent = Math.floor(state_from_rate * total_tax_from)
+        })
     }
     if (amtStateToAsNonRes !== 0){
         credit_ratio_to = (amtStateToAsNonRes/(amtStateToAsRes+ amtStateToAsNonRes)).toFixed(4)
         //Call getStateRate to get state rate
-        state_to_rate = getStateRate(primaryUser.stateTo)
-        console.log(`State To: ${primaryUser.stateTo}`)
-        total_tax_to = Math.floor((amtStateToAsRes + amtStateToAsNonRes) * state_to_rate)
-        console.log(`total_tax_to: ${amtStateToAsRes} ${amtStateToAsNonRes} ${total_tax_to}`)
+        //state_to_rate = getStateRate(primaryUser.stateTo)
+        ret = getStateRate(primaryUser.stateTo)
+        ret.then((value) => {           
+            state_to_rate = value[0].data[0].combined_rate
+            // console.log(`State To: ${primaryUser.stateTo}`)
+            total_tax_to = Math.floor((amtStateToAsRes + amtStateToAsNonRes) * state_to_rate)
+            console.log(`total_tax_to: ${amtStateToAsRes} ${amtStateToAsNonRes} ${total_tax_to}`)
+            document.querySelector('#total_tax_to').textContent = total_tax_to
+            document.querySelector('#credit_amt_to').textContent = Math.floor(state_to_rate * total_tax_to)
+        })
     }
-     
     document.querySelector('#credit_ratio_from').textContent = credit_ratio_from
     document.querySelector('#credit_ratio_to').textContent = credit_ratio_to
-    document.querySelector('#total_tax_from').textContent = total_tax_from
-    document.querySelector('#total_tax_to').textContent = total_tax_to
-    document.querySelector('#credit_amt_from').textContent = Math.floor(state_from_rate * total_tax_from)
-    document.querySelector('#credit_amt_to').textContent = Math.floor(state_to_rate * total_tax_to)
+    
+    
+    
+    
 }
 
